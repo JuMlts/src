@@ -31,10 +31,6 @@ import { MemoryMoviePickRepo } from "../MoviePicker/MoviePickRepo";
 import { getFirstLetterWithoutCommonWords } from '../Helpers/helper';
 import { selectLoading, setLoading } from '../Redux/loaderSlice';
 
-
-
-const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-
 const useStyles = makeStyles({
 
     searchContainer: {
@@ -228,7 +224,7 @@ const Home = () => {
                                         paddingTop: "2.5%",
                                         width: "100%",
                                         height: "30%",
-                                    }, // Add this line to add left padding
+                                    }, 
                                     placeholder: "Search",
                                 },
                             }}
