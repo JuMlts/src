@@ -6,7 +6,6 @@ import { Movie } from "../Types/Movie";
 import { makeStyles } from '@material-ui/core/styles';
 import Logo from "../Assets/Images/fontbolt.png";
 import './home.css';
-import MovieDetails from '../Types/MovieDetails';
 import { AiOutlineSearch } from "react-icons/Ai"
 import classnames from 'classnames';
 import Table from '@mui/material/Table';
@@ -16,8 +15,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { RiAddCircleLine } from "react-icons/ri";
-import { BsArrowLeftSquare } from "react-icons/bs";
+
 import { useDispatch, useSelector } from 'react-redux';
 import { setMovies, selectMovies, resetMovies, removeMovie } from "../Redux/moviesSlice";
 import { setOpen, selectOpen } from '../Redux/openSlice';
@@ -25,11 +23,13 @@ import { selectActiveMovie, setActiveMovie } from '../Redux/activeMovieSlice';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import AlphaList from '../Components/list';
 import { MoviePicker } from '../MoviePicker/MoviePicker';
-import { Modal, Button  } from '@mantine/core';
+import { Modal, Button } from '@mantine/core';
 import { LoadingOverlay } from '@mantine/core';
 import { MemoryMoviePickRepoLocalStorage } from "../MoviePicker/MemoryMoviePickRepo";
 import { getFirstLetterWithoutCommonWords } from '../Helpers/helper';
 import { selectLoading, setLoading } from '../Redux/loaderSlice';
+import { MovieDetailsTable } from '../Components/movieDetails';
+import MovieDetails from '../Types/MovieDetails';
 
 const useStyles = makeStyles({
 
@@ -146,10 +146,6 @@ const Home = () => {
         dispatch(setOpen(true));
     }
 
-    const handleClose = () => {
-        dispatch(setOpen(false));
-    };
-
     const handleSearchBlur = () => {
         setIsSearching(false);
     };
@@ -170,32 +166,9 @@ const Home = () => {
         }
     };
 
-    const isFirstLetterInMemo = async (title: string) => {
-        let firstLetter = getFirstLetterWithoutCommonWords(title)
-        let response = repo.getByFirstLetter(firstLetter);
-        if (response !== null) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    const addToFavorites = async (title: string) => {
-        let isLetterInMemo = await isFirstLetterInMemo(title);
-        if (isLetterInMemo === false) {
-            moviePicker.pick(title);
-        }
-        else {
-            setAlertMessage("Un élément à déja été enregistré pour cette lettre.")
-            setOpenModalOver(true);
-            
-        }
-    }
-
     const handleOverwrite = (title: any) => {
         setOpenModalOver(false);
-        repo.put(title);    
+        repo.put(title);
     }
 
     return (
@@ -232,7 +205,7 @@ const Home = () => {
                                         paddingTop: "2.5%",
                                         width: "100%",
                                         height: "30%",
-                                    }, 
+                                    },
                                     placeholder: "Search",
                                 },
                             }}
@@ -284,12 +257,12 @@ const Home = () => {
                 >
                     Un élément à déja été enregistré pour cette lettre, voulez vous quand même enregistrer cet élément ?
                     <div>
-                    <Button className='btn-modal' onClick={() => handleOverwrite(activeMovie?.title)}>
-                        Oui
-                    </Button>
-                    <Button className='btn-modal' onClick={() => setOpenModalOver(false)}>
-                        Non
-                    </Button>
+                        <Button className='btn-modal' onClick={() => handleOverwrite(activeMovie?.title)}>
+                            Oui
+                        </Button>
+                        <Button className='btn-modal' onClick={() => setOpenModalOver(false)}>
+                            Non
+                        </Button>
                     </div>
                 </Modal>
                 {movies && !open &&
@@ -328,50 +301,14 @@ const Home = () => {
                     </div>
                 }
                 {activeMovie && open &&
-                    <div className='movie-details'>
-                        <BsArrowLeftSquare className='back-icon' size={30} onClick={handleClose} />
-                        <div className="details-container">
-                            <img className='poster-in-card ' src={activeMovie.poster} />
-                            <div className='text-container'>
-                                {activeMovie.plot !== "N/A" &&
-                                    <div>
-                                        <p className='movie-details-title'> Synopsis : </p>
-                                        <p className='movie-details-text'> {activeMovie.plot} </p>
-                                    </div>
-                                }
-                                {activeMovie.actors !== "N/A" &&
-                                    <div>
-                                        <p className='movie-details-title'> Acteurs : </p>
-                                        <p className='movie-details-text'> {activeMovie.actors} </p>
-                                    </div>
-                                }
-                                {activeMovie.year !== "N/A" &&
-                                    <div>
-                                        <p className='movie-details-title'> {activeMovie.type !== "series" ? "Année de sortie : " : "Année de diffusion : "}</p>
-                                        <p className='movie-details-text'> {activeMovie.year} </p>
-                                    </div>
-                                }
-                                {activeMovie.type !== "N/A" &&
-                                    <div>
-                                        <p className='movie-details-title'> Type : </p>
-                                        <p className='movie-details-text'> {activeMovie.type} </p>
-                                    </div>
-                                }
-                                <div className='add-icon-container'>
-                                    <p className='movie-details-title '>
-                                        Ajouter ce film à mes favoris
-                                    </p>
-                                    <div className='add-icon' onClick={() => addToFavorites(activeMovie.title)}>
-                                        <RiAddCircleLine
-                                            size={30}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
+                    <MovieDetailsTable 
+                        activeMovie={activeMovie}
+                        repo={repo}
+                        moviePicker={moviePicker}
+                        setAlertMessage={setAlertMessage}
+                        setOpenModalOver={setOpenModalOver}
+                        setOpen={setOpen}
+                    />
                 }
 
             </div>

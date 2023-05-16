@@ -174,22 +174,6 @@ body::-webkit-scrollbar {
     height: 15vh;
 }
 
-/* @media (max-width: 1600px) {
-    .search-icon {
-        position: absolute;
-        margin-left: 30.8%;
-        margin-top: -0.5%;
-        transition: transform 0.3s ease-in-out;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transform: translateX(0);
-        cursor: pointer;
-        z-index: 10;
-    }
-} */
-
 @media (max-width: 1920px) {
     .search-icon {
         position: absolute;
@@ -374,20 +358,21 @@ body::-webkit-scrollbar {
     justify-content: flex-start;
     align-items: flex-start;
     height: 100%;
-    width: 80%;
+    width: 99%;
 }
 
 .movie-details-text {
     position: relative;
-    font-size: 16px;
+    font-size: 14px;
     color: #FFFFFF;
     flex: 1;
+    max-width: 100%;
     margin-bottom: 1%;
 }
 
 .movie-details-title {
     position: relative;
-    font-size: 18px;
+    font-size: 16px;
     color: red !important;
     flex: 1;
     margin-bottom: 1%;
