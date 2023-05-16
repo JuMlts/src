@@ -266,6 +266,7 @@ const Home = () => {
                     onClose={() => setOpenModal(false)}
                     title="Oups..."
                     transitionProps={{ transition: 'fade', duration: 200 }}
+                    className='modal'
                 >
                     {alertMessage}
                 </Modal>
@@ -275,6 +276,7 @@ const Home = () => {
                     onClose={() => setOpenModalOver(false)}
                     title="Oups..."
                     transitionProps={{ transition: 'fade', duration: 200 }}
+                    className='modal'
                 >
                     Un élément à déja été enregistré pour cette lettre, voulez vous quand même enregistrer cet élément ?
                     <div>

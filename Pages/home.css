@@ -12,9 +12,19 @@
 
 }
 
+.modal {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    color: #FFFFFF;
+}
+
 .btn-modal {
     margin-right: 10px;
     margin-top: 10px;
+    background-color: red;
+}
+
+.btn-modal:hover {
+    background-color: rgb(255, 77, 77);
 }
 
 body::before {
@@ -225,6 +235,15 @@ body::-webkit-scrollbar {
     width: 18rem;
     overflow-y: auto;
     border-radius: 4px;
+}
+
+.list-item {
+    border: 1px #303030;
+}
+
+.list-item:hover {
+    cursor: pointer;
+    background-color: #303030;
 }
 
 .list-icon {
