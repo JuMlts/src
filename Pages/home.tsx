@@ -121,7 +121,6 @@ const Home = () => {
                 resetMovies();
                 dispatch(setMovies(moviesTmp as Movie[]));
             } else {
-                console.error("Search results not found");
                 setOpenModal(true);
                 setAlertMessage("Aucun résultat n'a été trouvé")
                 dispatch(setLoading(false));
@@ -137,6 +136,28 @@ const Home = () => {
             }
         }
 
+    }
+
+    const isFavorite = async (title: string) => {
+        let firstLetter = getFirstLetterWithoutCommonWords(title)
+        let response = await repo.getByFirstLetter(firstLetter);
+        if (response !== null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    const addToFavorites = async (title: string) => {
+        let isLetterInMemo = await isFavorite(title);
+        if (isLetterInMemo === false) {
+            moviePicker.pick(title);
+        }
+        else {
+            setAlertMessage("Un élément à déja été enregistré pour cette lettre.")
+            setOpenModalOver(true);
+        }
     }
 
     const handleClickActiveMoive = async (movieId: number) => {
@@ -303,10 +324,7 @@ const Home = () => {
                 {activeMovie && open &&
                     <MovieDetailsTable 
                         activeMovie={activeMovie}
-                        repo={repo}
-                        moviePicker={moviePicker}
-                        setAlertMessage={setAlertMessage}
-                        setOpenModalOver={setOpenModalOver}
+                        addToFavorites={addToFavorites}
                         setOpen={setOpen}
                     />
                 }

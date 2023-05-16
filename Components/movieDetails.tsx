@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { getFirstLetterWithoutCommonWords } from '../Helpers/helper';
 import { MemoryMoviePickRepoLocalStorage } from '../MoviePicker/MemoryMoviePickRepo';
 import { MoviePicker } from '../MoviePicker/MoviePicker';
@@ -9,44 +9,17 @@ import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 
 type MovieDetailsProps = {
     activeMovie: MovieDetails;
-    repo: MemoryMoviePickRepoLocalStorage;
-    moviePicker: MoviePicker;
-    setAlertMessage: React.Dispatch<React.SetStateAction<string>>;
-    setOpenModalOver: React.Dispatch<React.SetStateAction<boolean>>;
     setOpen: ActionCreatorWithPayload<boolean, "open/setOpen">;
+    addToFavorites:(title: string) => void;
 };
 
 export const MovieDetailsTable: React.FC<MovieDetailsProps> = ({
-    activeMovie, repo, moviePicker, setAlertMessage, setOpenModalOver, setOpen
+    activeMovie, setOpen, addToFavorites
 }) => {
-
-    const isFavorite = async (title: string) => {
-        let firstLetter = getFirstLetterWithoutCommonWords(title)
-        let response = await repo.getByFirstLetter(firstLetter);
-        if (response !== null) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
 
     const handleClose = () => {
         dispatch(setOpen(false));
     };
-
-    const addToFavorites = async (title: string) => {
-        let isLetterInMemo = await isFavorite(title);
-        if (isLetterInMemo === false) {
-            moviePicker.pick(title);
-        }
-        else {
-            setAlertMessage("Un élément à déja été enregistré pour cette lettre.")
-            setOpenModalOver(true);
-
-        }
-    }
     return (
         <div className='movie-details'>
             <BsArrowLeftSquare className='back-icon' size={30} onClick={handleClose} />
