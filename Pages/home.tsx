@@ -25,9 +25,9 @@ import { selectActiveMovie, setActiveMovie } from '../Redux/activeMovieSlice';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import AlphaList from '../Components/list';
 import { MoviePicker } from '../MoviePicker/MoviePicker';
-import { Modal } from '@mantine/core';
+import { Modal, Button  } from '@mantine/core';
 import { LoadingOverlay } from '@mantine/core';
-import { MemoryMoviePickRepo } from "../MoviePicker/MoviePickRepo";
+import { MemoryMoviePickRepoLocalStorage } from "../MoviePicker/MemoryMoviePickRepo";
 import { getFirstLetterWithoutCommonWords } from '../Helpers/helper';
 import { selectLoading, setLoading } from '../Redux/loaderSlice';
 
@@ -88,10 +88,11 @@ const Home = () => {
     const header = document.getElementById("header");
     const open = useSelector(selectOpen);
     const [openList, setOpenList] = useState(false);
-    const moviePickerRepo = new MemoryMoviePickRepo();
+    const repo = new MemoryMoviePickRepoLocalStorage();
     const [openModal, setOpenModal] = useState(false);
-    const moviePicker = new MoviePicker(moviePickerRepo);
+    const moviePicker = new MoviePicker(repo);
     const [alertMessage, setAlertMessage] = useState("");
+    const [openModalOver, setOpenModalOver] = useState(false);
     const loading = useSelector(selectLoading);
 
     window.addEventListener("scroll", function () {
@@ -170,8 +171,9 @@ const Home = () => {
     };
 
     const isFirstLetterInMemo = async (title: string) => {
-        let allPicks = await moviePickerRepo.getAll();
-        if (allPicks.includes(getFirstLetterWithoutCommonWords(title))) {
+        let firstLetter = getFirstLetterWithoutCommonWords(title)
+        let response = repo.getByFirstLetter(firstLetter);
+        if (response !== null) {
             return true;
         }
         else {
@@ -185,8 +187,15 @@ const Home = () => {
             moviePicker.pick(title);
         }
         else {
-            setOpenModal(true);
+            setAlertMessage("Un élément à déja été enregistré pour cette lettre.")
+            setOpenModalOver(true);
+            
         }
+    }
+
+    const handleOverwrite = (title: any) => {
+        setOpenModalOver(false);
+        repo.put(title);    
     }
 
     return (
@@ -216,7 +225,6 @@ const Home = () => {
                             className={classes.textField}
                             onBlur={handleSearchBlur}
                             InputProps={{
-                                disableUnderline: true,
                                 inputProps: {
                                     style: {
                                         color: '#FFFFFF',
@@ -244,7 +252,7 @@ const Home = () => {
                 </div>
                 <div className='list-container'>
                     {openList &&
-                        <AlphaList openList={openList} moviePickerRepo={moviePickerRepo} />
+                        <AlphaList openList={openList} moviePickerRepo={repo} />
                     }
                 </div>
             </div>
@@ -260,11 +268,29 @@ const Home = () => {
                 }
                 <Modal
                     opened={openModal}
+                    centered
                     onClose={() => setOpenModal(false)}
                     title="Oups..."
                     transitionProps={{ transition: 'fade', duration: 200 }}
                 >
                     {alertMessage}
+                </Modal>
+                <Modal
+                    opened={openModalOver}
+                    centered
+                    onClose={() => setOpenModalOver(false)}
+                    title="Oups..."
+                    transitionProps={{ transition: 'fade', duration: 200 }}
+                >
+                    Un élément à déja été enregistré pour cette lettre, voulez vous quand même enregistrer cet élément ?
+                    <div>
+                    <Button className='btn-modal' onClick={() => handleOverwrite(activeMovie?.title)}>
+                        Oui
+                    </Button>
+                    <Button className='btn-modal' onClick={() => setOpenModalOver(false)}>
+                        Non
+                    </Button>
+                    </div>
                 </Modal>
                 {movies && !open &&
                     <TableContainer className='table-container' component={Paper}>

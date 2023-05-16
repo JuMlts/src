@@ -12,6 +12,11 @@
 
 }
 
+.btn-modal {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
 body::before {
     content: "";
     position: fixed;
@@ -143,7 +148,7 @@ body::-webkit-scrollbar {
 }
 
 .add-icon-container {
-   margin-top: 5%; 
+    margin-top: 5%;
 }
 
 .movie-viewer {
@@ -169,7 +174,7 @@ body::-webkit-scrollbar {
     height: 15vh;
 }
 
-@media (max-width: 1600px) {
+/* @media (max-width: 1600px) {
     .search-icon {
         position: absolute;
         margin-left: 30.8%;
@@ -183,13 +188,29 @@ body::-webkit-scrollbar {
         cursor: pointer;
         z-index: 10;
     }
-}
+} */
 
-@media (min-width: 1920px) {
+@media (max-width: 1920px) {
     .search-icon {
         position: absolute;
-        margin-left: 25%;
+        margin-left: 30rem;
         margin-top: -0.15%;
+        transition: transform 0.3s ease-in-out;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateX(0);
+        cursor: pointer;
+        z-index: 10;
+    }
+}
+
+@media (max-width: 770px) {
+    .search-icon {
+        position: absolute;
+        margin-left: 19.5rem;
+        margin-top: -0%;
         transition: transform 0.3s ease-in-out;
         height: 100%;
         display: flex;
@@ -207,7 +228,7 @@ body::-webkit-scrollbar {
 
 .list-container {
     position: absolute;
-    margin-left: 90%;
+    margin-left: 92%;
     margin-top: 4%;
 
 }
@@ -217,7 +238,7 @@ body::-webkit-scrollbar {
     background-color: rgba(0, 0, 0, 0.9);
     color: #FFFFFF;
     max-height: 250px;
-    width: 250px;
+    width: 18rem;
     overflow-y: auto;
     border-radius: 4px;
 }
