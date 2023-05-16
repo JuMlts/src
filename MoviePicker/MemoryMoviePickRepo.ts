@@ -1,4 +1,6 @@
 import { MoviePickRepo } from "./MoviePickRepo";
+import { getFirstLetterWithoutCommonWords } from '../Helpers/helper';
+
 
 /**
  *
@@ -34,8 +36,9 @@ export class MemoryMoviePickRepo implements MoviePickRepo {
    *
    */
   async put(title: string) {
+    let firstLetter = getFirstLetterWithoutCommonWords(title);
     if (title.length) {
-      this.byFirstLetter.set([...title][0].toUpperCase(), title);
+      this.byFirstLetter.set(firstLetter, title);
     }
   }
 }
@@ -60,7 +63,8 @@ export class MemoryMoviePickRepoLocalStorage implements MoviePickRepo {
 
   async put(title: string) {
     if (title.length) {
-      this.byFirstLetter.set([...title][0].toUpperCase(), title);
+      let firstLetter = getFirstLetterWithoutCommonWords(title);
+      this.byFirstLetter.set(firstLetter, title);
       this.saveDataToLocalStorage(); 
     }
   }

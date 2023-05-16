@@ -14,7 +14,7 @@ export class MoviePicker  {
    
         let firstLetter = getFirstLetterWithoutCommonWords(title);
         let isInPicks = await this.moviePickRepo.getByFirstLetter(firstLetter);
-
+        
         if (title && isInPicks) {
             throw new MoviePickAlreadyExistError("this letter is already used");
         }
