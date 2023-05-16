@@ -1,16 +1,9 @@
-import { MoviePickRepo } from "./MoviePickRepo";
+import { MemoryMoviePickRepoLocalStorage } from "./MemoryMoviePickRepo";
 import { getFirstLetterWithoutCommonWords } from '../Helpers/helper';
-
-
-/**
- *
- */
-
-
 export class MoviePicker  {
-    private myMoviePickRepo: MoviePickRepo; 
+    private myMoviePickRepo: MemoryMoviePickRepoLocalStorage; 
 
-    constructor(private moviePickRepo: MoviePickRepo) {
+    constructor(private moviePickRepo: MemoryMoviePickRepoLocalStorage) {
         this.myMoviePickRepo = moviePickRepo; 
     }
     

@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
-import { getFirstLetterWithoutCommonWords } from '../Helpers/helper';
-import { MemoryMoviePickRepoLocalStorage } from '../MoviePicker/MemoryMoviePickRepo';
-import { MoviePicker } from '../MoviePicker/MoviePicker';
 import MovieDetails from '../Types/MovieDetails';
 import { RiAddCircleLine } from "react-icons/ri";
 import { BsArrowLeftSquare } from "react-icons/bs";
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
 
 type MovieDetailsProps = {
     activeMovie: MovieDetails;
@@ -16,6 +14,7 @@ type MovieDetailsProps = {
 export const MovieDetailsTable: React.FC<MovieDetailsProps> = ({
     activeMovie, setOpen, addToFavorites
 }) => {
+    const dispatch = useDispatch();
 
     const handleClose = () => {
         dispatch(setOpen(false));
@@ -74,6 +73,3 @@ export const MovieDetailsTable: React.FC<MovieDetailsProps> = ({
     )
 }
 
-function dispatch(arg0: any) {
-    throw new Error('Function not implemented.');
-}
